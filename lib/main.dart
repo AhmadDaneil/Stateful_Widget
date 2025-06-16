@@ -32,42 +32,27 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Stateful Widget'),
+        title: const Text('Dialog Box'),
         centerTitle: true,
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              '$value',
-              style: const TextStyle(
-                fontSize: 50,
-                fontWeight:FontWeight.bold,
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ElevatedButton(onPressed: (){
-                  value--;
-                  setState(() {
-                  });
-                },
-                child: const Icon(Icons.arrow_downward),
+        child: ElevatedButton(
+          onPressed: (){
+            showDialog(context: context, builder: (context) => AlertDialog(
+              title: const Text('Warning'),
+              content: const Text('Watch out your click! Are you sure to proceed?'),
+              actions: [
+                ElevatedButton(onPressed: (){}, child: const Text('CANCEL')
                 ),
                 ElevatedButton(onPressed: (){
-                  value++;
-                  setState(() {
-                  });
-                },
-                child: const Icon(Icons.arrow_upward),
-                ),
+                }, child: const Text('PROCEED'))
               ],
             ),
-          ],
+            );
+          },
+          child: const Text('Click Me If You Dare!'),
           ),
           ),
     );
