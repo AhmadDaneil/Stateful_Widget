@@ -16,41 +16,67 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: MyHomePage(),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int value = 0;
+  final items = List<String>.generate(20, (i) => 'Item ${i + 1}');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Snack Bar'),
+        title: const Text('Dismissible List'),
         centerTitle: true,
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
       ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: (){
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              duration: const Duration(seconds:4),
-              behavior: SnackBarBehavior.floating,
-              content: const Text('Successfully removed!'),
-              action: SnackBarAction(label: 'UNDO', onPressed: (){}),
-              )
-              );
-          },
-          child: const Text('Click to remove!'),
-            ),
-            ),
-    );
-          }
-}
+      body: ListView.builder(
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          final item = items[index];
+          return Dismissible(
+            key: Key(item), 
+            direction: DismissDirection.endToStart,
+            dismissThresholds: const{
+              DismissDirection.startToEnd: 0.5,
+              DismissDirection.endToStart: 0.5,
+            },
+            onDismissed: (direction) {
+              final removedItem = items[index];
+              final removedIndex = index;
+            setState(() {
+              items.removeAt(index);
+            });
+            ScaffoldMessenger.of(context,).showSnackBar(SnackBar(
+                content: Text('$item dismissed'),
+                backgroundColor: Colors.blue,
+                action: SnackBarAction(label: 'UNDO', onPressed: (){
+                  setState(() {
+                    items.insert(removedIndex, removedItem);
+                  });
+                },
+                ),
+                  behavior: SnackBarBehavior.floating,
+                )
+                );
+            },
+            background: Container(color:Colors.red),
+            child:ListTile(title:Text(item)),
+          );
+                },
+                
+      ),
+                
+          );
+        }
+  }
