@@ -32,7 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dialog Box'),
+        title: const Text('Snack Bar'),
         centerTitle: true,
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
@@ -40,22 +40,17 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: ElevatedButton(
           onPressed: (){
-            showDialog(context: context, builder: (context) => AlertDialog(
-              title: const Text('Warning'),
-              content: const Text('Watch out your click! Are you sure to proceed?'),
-              actions: [
-                ElevatedButton(onPressed: (){}, child: const Text('CANCEL')
-                ),
-                ElevatedButton(onPressed: (){
-                }, child: const Text('PROCEED'))
-              ],
-            ),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              duration: const Duration(seconds:4),
+              behavior: SnackBarBehavior.floating,
+              content: const Text('Successfully removed!'),
+              action: SnackBarAction(label: 'UNDO', onPressed: (){}),
+              )
+              );
           },
-          child: const Text('Click Me If You Dare!'),
-          ),
-          ),
+          child: const Text('Click to remove!'),
+            ),
+            ),
     );
-    
-}
+          }
 }
